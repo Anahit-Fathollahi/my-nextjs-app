@@ -33,18 +33,19 @@ export async function DELETE(_req: Request, { params }: { params: { id: string }
 
 
 export async function PUT(
-  req: NextRequest,
-  { params }: { params: { id: string } }
+  request: NextRequest,
+  context: { params: { id: string } }
 ) {
+  const { params } = context;
   const id = Number(params.id);
-  const body = await req.json();
+  const body = await request.json();
 
   const post = await prisma.post.update({
     where: { id },
     data: {
       title: body.title,
       author: body.author,
-      content: body.content || ""
+      content: body.content || "",
     },
   });
 
