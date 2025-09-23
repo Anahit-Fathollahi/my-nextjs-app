@@ -1,4 +1,4 @@
-import { NextResponse } from "next/server"
+import { NextRequest, NextResponse } from "next/server"
 import prisma from "@/lib/prisma"
 import text from "../../../../public/locales/fa/common.json"
 
@@ -32,12 +32,21 @@ export async function DELETE(_req: Request, { params }: { params: { id: string }
 }
 
 
-export async function PUT(req: Request, { params }: { params: { id: string } }) {
-  const id = Number(params.id)
-  const body = await req.json()
+export async function PUT(
+  req: NextRequest,
+  { params }: { params: { id: string } }
+) {
+  const id = Number(params.id);
+  const body = await req.json();
+
   const post = await prisma.post.update({
     where: { id },
-    data: { title: body.title, author: body.author, content: body.content || "" }
-  })
-  return NextResponse.json(post)
+    data: {
+      title: body.title,
+      author: body.author,
+      content: body.content || ""
+    },
+  });
+
+  return NextResponse.json(post);
 }
