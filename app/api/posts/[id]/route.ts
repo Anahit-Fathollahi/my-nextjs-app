@@ -9,7 +9,7 @@ export async function GET() {
   return NextResponse.json(posts)
 }
 
-export async function POST(req: Request) {
+export async function POST(req: NextRequest) {
   const body = await req.json()
   if (!body.title || !body.author) {
     return NextResponse.json({ error: text.username_required }, { status: 400 })
@@ -24,21 +24,18 @@ export async function POST(req: Request) {
   return NextResponse.json(post, { status: 201 })
 }
 
-
-export async function DELETE(_req: Request, { params }: { params: { id: string } }) {
+export async function DELETE(_req: NextRequest, { params }: { params: { id: string } }) {
   const id = Number(params.id)
   await prisma.post.delete({ where: { id } })
   return NextResponse.json({ ok: true })
 }
 
-
 export async function PUT(
   request: NextRequest,
-  context: { params: { id: string } }
+  { params }: { params: { id: string } }
 ) {
-  const { params } = context;
-  const id = Number(params.id);
-  const body = await request.json();
+  const id = Number(params.id)
+  const body = await request.json()
 
   const post = await prisma.post.update({
     where: { id },
@@ -47,7 +44,7 @@ export async function PUT(
       author: body.author,
       content: body.content || "",
     },
-  });
+  })
 
-  return NextResponse.json(post);
+  return NextResponse.json(post)
 }
