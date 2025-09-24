@@ -1,9 +1,11 @@
-// app/login/page.tsx
-import text from "../../public/locales/fa/common.json"
-import LoginForm from "./loginForm"
+import text from "../../public/locales/fa/common.json";
+import LoginForm from "./loginForm";
 
-export default async function LoginPage({ searchParams }: { searchParams?: { callbackUrl?: string } }) {
-  const callbackUrl = searchParams?.callbackUrl ?? "/profile"
-
-  return <LoginForm callbackUrl={callbackUrl} text={text} />
+export default async function LoginPage({
+  searchParams,
+}: {
+  searchParams?: Promise<{ callbackUrl?: string }>;
+}) {
+  const { callbackUrl = "/profile" } = await searchParams || {};
+  return <LoginForm callbackUrl={callbackUrl} text={text} />;
 }
